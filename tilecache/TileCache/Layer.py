@@ -1,6 +1,6 @@
 # BSD Licensed, Copyright (c) 2006-2010 TileCache Contributors
 
-import os, sys, time
+import os, sys, time, urllib2
 from warnings import warn
 from Client import WMS
 from Service import TileCacheException
@@ -267,7 +267,8 @@ class Layer (object):
                         watermarkimage = None, watermarkopacity = 0.2,
                         spherical_mercator = False,
                         extent_type = "strict", units = "degrees", tms_type = "",
-                        expired = None, **kwargs ):
+                        expired = None, token_url=None, token_username=None, token_password=None,
+                        **kwargs ):
         """Take in parameters, usually from a config file, and create a Layer.
 
         >>> l = Layer("Name", bbox="-12,17,22,36", debug="no")
@@ -372,7 +373,13 @@ class Layer (object):
         for key in kwargs:
             if key.startswith("metadata_"):
                 self.metadata[key[prefix_len:]] = kwargs[key]
-                
+ 
+        self.token_url = token_url
+        self.token_username = token_username
+        self.token_password = token_password
+        self.current_token = None
+        self._inside_token_retry = False
+               
     ############################################################################
     ## @brief method to get the resolution of a layer at a particular bounds
     ##
@@ -865,6 +872,11 @@ class MetaLayer (Layer):
             watermarkedImage.save(buffer, self.extension)
         buffer.seek(0)
         return buffer.read()
+
+    def set_auth_token(self):
+        url = r'%s?username=%s&password=%s' % (self.token_url, self.token_username, self.token_password)
+        res = urllib2.urlopen(url)
+        self.current_token = res.read()
 
 if __name__ == "__main__":
     import doctest

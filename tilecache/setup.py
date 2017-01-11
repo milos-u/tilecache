@@ -9,7 +9,7 @@ except:
     use_setuptools()
     from setuptools import setup
 
-#readme = file('docs/README.txt','rb').read()
+readme = file('docs/README.txt','rb').read()
 
 classifiers = [
         'Development Status :: 4 - Beta',
@@ -37,7 +37,7 @@ setup(name='TileCache',
       author='TileCache Contributors',
       author_email='tilecache@lists.osgeo.org',
       url='http://tilecache.org/',
-      #long_description=readme,
+      long_description=readme,
       packages=['TileCache', 'TileCache.Caches', 'TileCache.Services', 'TileCache.Layers', 'TileCache.Configs'],
       scripts=['tilecache.cgi', 'tilecache.fcgi', 'tilecache.wsgi',
                'tilecache_seed.py', 'tilecache_install_config.py', 

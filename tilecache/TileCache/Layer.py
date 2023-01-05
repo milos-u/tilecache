@@ -529,7 +529,8 @@ class Layer (object):
             if (abs(miny - tiley)  / res > 1):
                 raise TileCacheException("Current y value %f is too far from tile corner y %f" % (miny, tiley))  
         
-        return (x, y, z)
+        assert int(x) == x, int(y) == y
+        return (int(x), int(y), z)
 
     ############################################################################
     ## @brief method to get the closest cell coords of a layer at a particular bounds

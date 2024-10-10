@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import io
 import sys
 
 try:
@@ -9,7 +10,10 @@ except:
     use_setuptools()
     from setuptools import setup
 
-readme = file('docs/README.txt','rb').read()
+if sys.version_info[0] < 3:
+    readme = io.open('docs/README.txt', 'rb').read()
+else:
+    readme = io.open('docs/README.txt', 'r', encoding='utf-8').read()
 
 classifiers = [
         'Development Status :: 4 - Beta',
